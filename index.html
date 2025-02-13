@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Translator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        input, textarea, button { margin: 10px; padding: 10px; width: 80%; max-width: 400px; }
+        button { cursor: pointer; background: #007bff; color: white; border: none; }
+    </style>
+    <script>
+        async function translateText() {
+            console.log("hi ")
+            const text = document.getElementById("text").value;
+            const sourceLang = document.getElementById("sourceLang").value;
+            const targetLang = document.getElementById("targetLang").value;
+
+            if (!text) {
+                alert("Please enter text to translate.");
+                return;
+            }
+
+            const formData = new URLSearchParams();
+            formData.append("text", text);
+            formData.append("source_lang", sourceLang);
+            formData.append("target_lang", targetLang);
+
+            const response = await fetch("http://127.0.0.1:8000/translate", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: formData
+            });
+
+            const result = await response.json();
+            document.getElementById("output").innerText = result.translated_text || "Error: Translation failed.";
+        }
+    </script>
+</head>
+<body>
+    <h2>Text Translator</h2>
+
+    <label for="sourceLang">Source Language:</label>
+    <input type="text" id="sourceLang" placeholder="e.g., hi for Hindi" required><br>
+
+    <label for="targetLang">Target Language:</label>
+    <input type="text" id="targetLang" placeholder="e.g., en for English" required><br>
+
+    <textarea id="text" placeholder="Enter text to translate"></textarea><br>
+
+    <button onclick="translateText()">Translate</button>
+
+    <h3>Translation Output:</h3>
+    <p id="output"></p>
+</body>
+</html>
