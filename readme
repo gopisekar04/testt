@@ -1,0 +1,3 @@
+use this command to install all the packages
+
+pip install fastapi uvicorn deep-translator fastapi[all]
